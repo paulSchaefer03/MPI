@@ -5,7 +5,7 @@
 #include <math.h>
 #include "mpi.h"
 
-#define MATRIX_SIZE 800
+#define MATRIX_SIZE 20
 
 // Formate für die Matrix-Elemente
 /* #define TYP double
@@ -16,10 +16,10 @@
 #define IST_INT 1
 
 
-void ausgabeArrayAlsMatrix(TYP* arr) {
-    for (int i = 0; i < MATRIX_SIZE; i++) {
-        for (int j = 0; j < MATRIX_SIZE; j++) {
-            printf(FORMAT " ", arr[i * MATRIX_SIZE + j]);
+void ausgabeArrayAlsMatrix(TYP* arr, int block_size) {
+    for (int i = 0; i < block_size; i++) {
+        for (int j = 0; j < block_size; j++) {
+            printf(FORMAT " ", arr[i * block_size + j]);
         }
         printf("\n");
     }
@@ -64,150 +64,176 @@ TYP berechenSummeArray(TYP *array) {
 
 
 int main(int argc, char *argv[]) {
-
+    
+    int world_rank, world_size;
     int rank, size, ierr;
 
     MPI_Status status;
     MPI_Init(&argc, &argv);
 
-    MPI_Comm_size(MPI_COMM_WORLD, &size);
-    MPI_Comm_rank(MPI_COMM_WORLD, &rank);
-    int q = sqrt(size);  // Prozessgittergröße
+    MPI_Comm_size(MPI_COMM_WORLD, &world_size);
+    MPI_Comm_rank(MPI_COMM_WORLD, &world_rank);
+    int q = sqrt(world_size);  // Prozessgittergröße
     if (MATRIX_SIZE % q != 0) {
-        if (rank == 0) {
+        if (world_rank == 0) {
             printf("Matrixgröße nicht durch Anzahl Prozesse pro Dimension teilbar!\n");
         }
         MPI_Abort(MPI_COMM_WORLD, 1);
     }
     
     int block_size = MATRIX_SIZE / q;
+
+
     int dims[2] = {q, q};
-    int periods[2] = {1, 1};  // zyklische Anordnung
+    int periods[2] = {1, 1};  // zyklische verschiebungen durch das gitter
     int reorder = 0;
     MPI_Comm KART_KOMM;
     MPI_Cart_create(MPI_COMM_WORLD, 2, dims, periods, reorder, &KART_KOMM);
+    // Bestimme den Rang des Prozesses im neuen Kommunikator (sollte sich nicht änderen da Kommunikatoren gleich groß bin mir aber nicht sicher)
     MPI_Comm_rank(KART_KOMM, &rank);
     MPI_Comm_size(KART_KOMM, &size);
 
-
-
-    //Datatype für die Submatrix erstellen, einfachere Handhabung
-    MPI_Datatype TYP_SUBMATRIX;
-    MPI_Type_vector(block_size, block_size, MATRIX_SIZE, MPI_DOUBLE, &TYP_SUBMATRIX);
-    MPI_Type_create_resized(TYP_SUBMATRIX, 0, block_size * sizeof(TYP), &TYP_SUBMATRIX);
-    MPI_Type_commit(&TYP_SUBMATRIX);
+    int koords[2];
+    MPI_Cart_coords(KART_KOMM, rank, 2, koords);
 
 
 
-    int koord[2];
-    MPI_Cart_coords(KART_KOMM, rank, 2, koord);
-    int my_rank_row = koord[0];
-    int my_rank_col = koord[1];
+    // Initialisierung der globalen Matrizen NUR auf Rank 0
+    TYP *matrix_a = NULL;
+    TYP *matrix_b = NULL;
+    TYP *matrix_c = NULL;
     
+    //Global INIT
+    if (rank == 0) {
+        //Speicher für die globalen Matrizen allokieren
+        matrix_a = malloc(MATRIX_SIZE * MATRIX_SIZE * sizeof(TYP));
+        matrix_b = malloc(MATRIX_SIZE * MATRIX_SIZE * sizeof(TYP));
+        matrix_c = malloc(MATRIX_SIZE * MATRIX_SIZE * sizeof(TYP));
+        // Initalisierung der globalen Matrizen
 
-    // Lokale Matrizen statt einzelner Elemente
+        befullenMatrix(matrix_a);
+        //printf("A_Global:\n");
+        //ausgabeArrayAlsMatrix(matrix_a, MATRIX_SIZE);
+        
+        befullenMatrix(matrix_b);
+        //printf("B_Global:\n");
+        //ausgabeArrayAlsMatrix(matrix_b, MATRIX_SIZE);
+
+
+        // Check um später Richtigkeit zu prüfen
+        multiplizierenMatrix(matrix_a, matrix_b, matrix_c);
+
+
+        //printf("Ergebniss Matrix (Korrekt):\n");
+        //ausgabeArrayAlsMatrix(matrix_c, MATRIX_SIZE); 
+        printf("Ergebniss Korrekt:"FORMAT"\n", berechenSummeArray(matrix_c));
+
+    }
+
+
+    // Broadcast der Submatrizen vorbereiten
+
+    // Lokale Matrizen "Buffer" global für alle Ranks
     TYP* A_local = malloc(block_size * block_size * sizeof(TYP));
     TYP* B_local = malloc(block_size * block_size * sizeof(TYP));
-    TYP* C_local = calloc(block_size * block_size, sizeof(TYP));
+    TYP *C_local = calloc(block_size * block_size, sizeof(TYP));
+
+    int *sendzaehler = malloc(size * sizeof(int));
+    int *verschiebungen = malloc(size * sizeof(int));
+
+    // Index verschiebenungen auf den Matrizen berechenen um bei 1D Arrays und bei Scatterv die richtigen Daten zu senden
+    for (int i = 0; i < world_size; i++) {
+        int tmp_koords[2];
+        MPI_Cart_coords(KART_KOMM, i, 2, tmp_koords);
+        sendzaehler[i] = 1;
+        verschiebungen[i] = tmp_koords[0] * MATRIX_SIZE * block_size + tmp_koords[1] * block_size;
+    }
+
+    //Datatypen für die Submatrizen erstellen, einfachere Handhabung
+    MPI_Datatype TYPE_SUBMATRIX;
+    MPI_Type_vector(block_size, block_size, MATRIX_SIZE, IST_INT ? MPI_INT : MPI_DOUBLE, &TYPE_SUBMATRIX);
+    MPI_Type_create_resized(TYPE_SUBMATRIX, 0, sizeof(TYP), &TYPE_SUBMATRIX);
+    MPI_Type_commit(&TYPE_SUBMATRIX);
+
+    // Scatterv für matrix_a
+    MPI_Scatterv(matrix_a, sendzaehler, verschiebungen, TYPE_SUBMATRIX,
+                 A_local, block_size * block_size, IST_INT ? MPI_INT : MPI_DOUBLE,
+                 0, KART_KOMM);
+
+    // Scatterv für matrix_b
+    MPI_Scatterv(matrix_b, sendzaehler, verschiebungen, TYPE_SUBMATRIX,
+                 B_local, block_size * block_size, IST_INT ? MPI_INT : MPI_DOUBLE,
+                 0, KART_KOMM);
 
 
 
-    TYP *matrix_a = malloc(MATRIX_SIZE * MATRIX_SIZE * sizeof(TYP));
-    TYP *matrix_b = malloc(MATRIX_SIZE * MATRIX_SIZE * sizeof(TYP));
+    // Initiales Verschieben A: shift left (dimension 1), Blockweise nach links NICHT ELEMENTWEISE
+    int quelle_A, ziel_A;
+    MPI_Cart_shift(KART_KOMM, 1, -koords[0], &quelle_A, &ziel_A);
+    MPI_Sendrecv_replace(A_local, block_size * block_size, IST_INT ? MPI_INT : MPI_DOUBLE,
+                        ziel_A, 0, quelle_A, 0, KART_KOMM, MPI_STATUS_IGNORE);
     
-
-    int *sendcounts = malloc(size * sizeof(int));
-    int *displs = malloc(size * sizeof(int));
-    for (int i = 0; i < q; i++) {
-        for (int j = 0; j < q; j++) {
-            sendcounts[i * q + j] = 1;
-            displs[i * q + j] = i * MATRIX_SIZE * block_size + j * block_size;
-        }
-    }
-
-    if (rank == 0) {
-        TYP *matrix_c = malloc(MATRIX_SIZE * MATRIX_SIZE * sizeof(TYP));
-        befullenMatrix(matrix_a);
-        befullenMatrix(matrix_b);
-        multiplizierenMatrix(matrix_a, matrix_b, matrix_c);
-/*         printf("Ergebniss Matrix (Korrekt):\n");
-        ausgabeMatrix(matrix_c); */
-        printf("Ergebniss Korrekt:"FORMAT"\n", berechenSummeArray(matrix_c));
-        free(matrix_c);
-    }
-
-    MPI_Scatterv(matrix_a, sendcounts, displs, TYP_SUBMATRIX,
-        A_local, block_size * block_size, IST_INT ? MPI_INT : MPI_DOUBLE,
-        0, KART_KOMM);
-
-    MPI_Scatterv(matrix_b, sendcounts, displs, TYP_SUBMATRIX,
-            B_local, block_size * block_size, IST_INT ? MPI_INT : MPI_DOUBLE,
-            0, KART_KOMM);
-
-    // A initial BLÖCKE verschieben
-    for (int k = 0; k < my_rank_row; k++) {
-        int quell, ziel;
-        MPI_Cart_shift(KART_KOMM, 1, -1, &quell, &ziel); // horizontaler shift (dimension 1)
-        MPI_Sendrecv_replace(A_local, block_size*block_size, IST_INT ? MPI_INT : MPI_DOUBLE, ziel, 0, quell, 0, KART_KOMM, MPI_STATUS_IGNORE);
-    }
-
-    // B initial BLÖCKE verschieben
-    for (int k = 0; k < my_rank_col; k++) {
-        int quell, ziel;
-        MPI_Cart_shift(KART_KOMM, 0, -1, &quell, &ziel); // vertikaler shift (dimension 0)
-        MPI_Sendrecv_replace(B_local, block_size*block_size, IST_INT ? MPI_INT : MPI_DOUBLE, ziel, 1, quell, 1, KART_KOMM, MPI_STATUS_IGNORE);
-    }
-        
     
+    // Initiales Verschieben B: shift up (dimension 0), Blockweise nach oben NICHT ELEMENTWEISE
+    // Verschiebungen anhand des Karthesischen Koordinatensystems
+    // koords[0] = Zeilenkoordinate (horizontal), koords[1] = Spaltenkoordinate (vertikal)
+    // Verschiebung erfolgt in der Richtung der Spaltenkoordinate (vertikal)
+    // Daher wird die Dimension 0 (vertikal)
+    // für die Verschiebung von B verwendet.
+    // Das bedeutet, dass die Blöcke von B um Spaltenzahl - 1 nach oben verschoben werden.
+    int quelle_B, ziel_B;
+    MPI_Cart_shift(KART_KOMM, 0, -koords[1], &quelle_B, &ziel_B);
+    MPI_Sendrecv_replace(B_local, block_size * block_size, IST_INT ? MPI_INT : MPI_DOUBLE, ziel_B, 0, quelle_B, 0, KART_KOMM, MPI_STATUS_IGNORE);
+
+
+
     for (int schritt = 0; schritt < q; schritt++) {
-        // Lokale MATRIX Multiplikation
+        // Lokale Multiplikation
         for (int i = 0; i < block_size; i++) {
             for (int j = 0; j < block_size; j++) {
-            for (int k = 0; k < block_size; k++) {
-                C_local[i * block_size + j] += A_local[i * block_size + k] * B_local[k * block_size + j];
-            }
+                for (int k = 0; k < block_size; k++) {
+                    C_local[i * block_size + j] += A_local[i * block_size + k] * B_local[k * block_size + j];
+                }
             }
         }
 
-    
-        // Shift A nach links (horizontal)
-        int ziel_A, quell_A;
-        MPI_Cart_shift(KART_KOMM, 1, -1, &quell_A, &ziel_A);
-        MPI_Sendrecv_replace(A_local, block_size*block_size, IST_INT ? MPI_INT : MPI_DOUBLE, ziel_A, 0, quell_A, 0, KART_KOMM, MPI_STATUS_IGNORE);
-    
-        // Shift B nach oben (vertikal)
-        int ziel_B, quell_B;
-        MPI_Cart_shift(KART_KOMM, 0, -1, &quell_B, &ziel_B);
-        MPI_Sendrecv_replace(B_local, block_size*block_size, IST_INT ? MPI_INT : MPI_DOUBLE, ziel_B, 1, quell_B, 1, KART_KOMM, MPI_STATUS_IGNORE);
-    }
-       
+        // Danach: shiften
+        if (schritt < q - 1) {  // Letzter Shift nicht mehr nötig nach q Schritten
+            int quelle_A, ziel_A;
+            MPI_Cart_shift(KART_KOMM, 1, -1, &quelle_A, &ziel_A);
+            MPI_Sendrecv_replace(A_local, block_size * block_size, IST_INT ? MPI_INT : MPI_DOUBLE,
+                                ziel_A, 0, quelle_A, 0, KART_KOMM, MPI_STATUS_IGNORE);
 
-    // End of Cannon Algorithmus: Sammeln der Ergebnisse
-    TYP *C_result = NULL;
-    if (rank == 0) {
-        C_result = malloc(MATRIX_SIZE * MATRIX_SIZE * sizeof(TYP));
+            int quelle_B, ziel_B;
+            MPI_Cart_shift(KART_KOMM, 0, -1, &quelle_B, &ziel_B);
+            MPI_Sendrecv_replace(B_local, block_size * block_size, IST_INT ? MPI_INT : MPI_DOUBLE,
+                                ziel_B, 0, quelle_B, 0, KART_KOMM, MPI_STATUS_IGNORE);
+            
+        }
     }
 
     MPI_Gatherv(C_local, block_size * block_size, IST_INT ? MPI_INT : MPI_DOUBLE,
-                C_result, sendcounts, displs, TYP_SUBMATRIX, 0, KART_KOMM);
+            matrix_c, sendzaehler, verschiebungen, TYPE_SUBMATRIX,
+            0, KART_KOMM);
 
-    free(sendcounts);
-    free(displs);
-
-    // Ausgabe Ergebnis auf Rank 0
     if (rank == 0) {
-/*         printf("Ergebnis Matrix:\n");
-        ausgabeArrayAlsMatrix(C_result); */
-        printf("Ergebnis (Cannon):" FORMAT "\n", berechenSummeArray(C_result));
-        free(C_result);
+        //printf("C_Global:\n");
+        //ausgabeArrayAlsMatrix(matrix_c, MATRIX_SIZE);
+        printf("Ergebniss Cannon:"FORMAT"\n", berechenSummeArray(matrix_c));
+        free(matrix_c);
     }
-
+        
+    
+    
     free(A_local);
     free(B_local);
-    free(C_local);
-    free(matrix_a);
-    free(matrix_b);
-    MPI_Type_free(&TYP_SUBMATRIX);
+    if (rank == 0) {
+        free(matrix_a);
+        free(matrix_b);
+    }
+    free(sendzaehler);
+    free(verschiebungen);
+    MPI_Type_free(&TYPE_SUBMATRIX); 
     MPI_Comm_free(&KART_KOMM);
     MPI_Barrier(MPI_COMM_WORLD);
 
