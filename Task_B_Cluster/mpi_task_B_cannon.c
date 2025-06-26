@@ -5,10 +5,10 @@
 #include <math.h>
 #include "mpi.h"
 
-#define MATRIX_SIZE 8000
+#define MATRIX_SIZE 20000
 #define DETERMINISTIC 1 // 1 für deterministische Ausführung, 0 für zufällige Ausführung
 #define CLUSTER 1       // 1 für Cluster, 0 für lokale Ausführung
-#define VERTEILTES_INIT 0 // 1 für parallele Initialisierung durch alle Prozesse, 0 für Rank-0-only Init
+#define VERTEILTES_INIT 1 // 1 für parallele Initialisierung durch alle Prozesse, 0 für Rank-0-only Init
 
 
 // Formate für die Matrix-Elemente

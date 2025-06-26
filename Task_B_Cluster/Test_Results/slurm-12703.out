@@ -1,0 +1,26 @@
+Matrix groesse : 12000 x 12000
+Anzahl Ranks: 400
+Blockgroesse: 600 x 600
+Kommunikator: 20 x 20
+Initialisierung der Matrizen auf Rank 0: 19.722459 Sekunden
+Scatterv Zeit: 1.880465 Sekunden
+Cannon Rechenzeit: 18.532666 Sekunden
+Gather Zeit: 1.685725 Sekunden
+Ergebniss Cannon:-4771612540200
+Programm ausgeführt in: 42.050352 Sekunden
+[node-00:2067760:0:2067760] Caught signal 11 (Segmentation fault: address not mapped to object at address 0x10)
+==== backtrace (tid:2067760) ====
+ 0 0x000000000003ff30 __GI___sigaction()  ???:0
+ 1 0x000000000002ba3a opal_free_list_destruct()  ???:0
+ 2 0x0000000000293b09 mca_pml_ob1_component_fini()  ???:0
+ 3 0x00000000000375ba opal_finalize_cleanup_domain()  ???:0
+ 4 0x000000000002a2ef opal_finalize()  ???:0
+ 5 0x000000000009f7ab ompi_rte_finalize()  ???:0
+ 6 0x00000000000a64dc ompi_mpi_instance_finalize_common()  ???:0
+ 7 0x00000000000a7aad ompi_mpi_instance_finalize()  ???:0
+ 8 0x000000000009bb4f ompi_mpi_finalize()  ???:0
+ 9 0x00000000004029bc main()  ???:0
+10 0x000000000002a10e __libc_start_call_main()  ???:0
+11 0x000000000002a1c9 __libc_start_main_alias_2()  ???:0
+12 0x0000000000402d35 _start()  ???:0
+=================================

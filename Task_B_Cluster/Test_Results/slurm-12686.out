@@ -1,0 +1,10 @@
+Matrix groesse : 4000 x 4000
+Anzahl Ranks: 25
+Blockgroesse: 800 x 800
+Kommunikator: 5 x 5
+Initialisierung der Matrizen auf Rank 0: 2.165922 Sekunden
+Scatterv Zeit: 0.205027 Sekunden
+Cannon Rechenzeit: 11.543080 Sekunden
+Gather Zeit: 0.199736 Sekunden
+Ergebniss Cannon:5392656653293
+Programm ausgeführt in: 14.167044 Sekunden
