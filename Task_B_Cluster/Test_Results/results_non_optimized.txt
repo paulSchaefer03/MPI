@@ -1,0 +1,346 @@
+Matrix groesse : 800 x 800
+Anzahl Ranks: 25
+Blockgroesse: 160 x 160
+Kommunikator: 5 x 5
+Initialisierung der Matrizen auf Rank 0: 0.089442 Sekunden
+Scatterv Zeit: 0.035884 Sekunden
+Cannon Rechenzeit: 0.067311 Sekunden
+Gather Zeit: 0.009619 Sekunden
+Ergebniss Cannon:367655419259
+Programm ausgeführt in: 0.244000 Sekunden
+
+
+
+Matrix groesse : 800 x 800
+Anzahl Ranks: 64
+Blockgroesse: 100 x 100
+Kommunikator: 8 x 8
+Initialisierung der Matrizen auf Rank 0: 0.095243 Sekunden
+Scatterv Zeit: 0.094324 Sekunden
+Cannon Rechenzeit: 0.020680 Sekunden
+Gather Zeit: 0.021553 Sekunden
+Ergebniss Cannon:367655419259
+Programm ausgeführt in: 0.294943 Sekunden
+
+
+
+Matrix groesse : 800 x 800
+Anzahl Ranks: 100
+Blockgroesse: 80 x 80
+Kommunikator: 10 x 10
+Initialisierung der Matrizen auf Rank 0: 0.085227 Sekunden
+Scatterv Zeit: 0.182356 Sekunden
+Cannon Rechenzeit: 0.024091 Sekunden
+Gather Zeit: 0.029532 Sekunden
+Ergebniss Cannon:367655419259
+Programm ausgeführt in: 0.372035 Sekunden
+
+
+
+Matrix groesse : 795 x 795
+Anzahl Ranks: 225
+Blockgroesse: 53 x 53
+Kommunikator: 15 x 15
+Initialisierung der Matrizen auf Rank 0: 0.086383 Sekunden
+Scatterv Zeit: 0.436523 Sekunden
+Cannon Rechenzeit: 0.020500 Sekunden
+Gather Zeit: 0.034768 Sekunden
+Ergebniss Cannon:-166292810053
+Programm ausgeführt in: 0.658508 Sekunden
+
+
+
+Matrix groesse : 798 x 798
+Anzahl Ranks: 361
+Blockgroesse: 42 x 42
+Kommunikator: 19 x 19
+Initialisierung der Matrizen auf Rank 0: 0.084471 Sekunden
+Scatterv Zeit: 0.751370 Sekunden
+Cannon Rechenzeit: 0.068405 Sekunden
+Gather Zeit: 0.010091 Sekunden
+Ergebniss Cannon:383155499708
+Programm ausgeführt in: 1.014340 Sekunden
+
+
+
+Matrix groesse : 800 x 800
+Anzahl Ranks: 400
+Blockgroesse: 40 x 40
+Kommunikator: 20 x 20
+Initialisierung der Matrizen auf Rank 0: 0.085152 Sekunden
+Scatterv Zeit: 0.827237 Sekunden
+Cannon Rechenzeit: 0.073418 Sekunden
+Gather Zeit: 0.010881 Sekunden
+Ergebniss Cannon:367655419259
+Programm ausgeführt in: 1.099522 Sekunden
+
+
+
+Matrix groesse : 2000 x 2000
+Anzahl Ranks: 25
+Blockgroesse: 400 x 400
+Kommunikator: 5 x 5
+Initialisierung der Matrizen auf Rank 0: 0.554980 Sekunden
+Scatterv Zeit: 0.075500 Sekunden
+Cannon Rechenzeit: 1.261402 Sekunden
+Gather Zeit: 0.052331 Sekunden
+Ergebniss Cannon:475901762408
+Programm ausgeführt in: 1.985635 Sekunden
+
+
+
+Matrix groesse : 2000 x 2000
+Anzahl Ranks: 64
+Blockgroesse: 250 x 250
+Kommunikator: 8 x 8
+Initialisierung der Matrizen auf Rank 0: 0.548206 Sekunden
+Scatterv Zeit: 0.124738 Sekunden
+Cannon Rechenzeit: 0.415961 Sekunden
+Gather Zeit: 0.077843 Sekunden
+Ergebniss Cannon:475901762408
+Programm ausgeführt in: 1.228974 Sekunden
+
+
+
+Matrix groesse : 2000 x 2000
+Anzahl Ranks: 100
+Blockgroesse: 200 x 200
+Kommunikator: 10 x 10
+Initialisierung der Matrizen auf Rank 0: 0.535102 Sekunden
+Scatterv Zeit: 0.198713 Sekunden
+Cannon Rechenzeit: 0.250192 Sekunden
+Gather Zeit: 0.079307 Sekunden
+Ergebniss Cannon:475901762408
+Programm ausgeführt in: 1.114149 Sekunden
+
+
+
+Matrix groesse : 1995 x 1995
+Anzahl Ranks: 225
+Blockgroesse: 133 x 133
+Kommunikator: 15 x 15
+Initialisierung der Matrizen auf Rank 0: 0.552938 Sekunden
+Scatterv Zeit: 0.463334 Sekunden
+Cannon Rechenzeit: 0.096325 Sekunden
+Gather Zeit: 0.066759 Sekunden
+Ergebniss Cannon:-428767214660
+Programm ausgeführt in: 1.259026 Sekunden
+
+
+
+Matrix groesse : 1995 x 1995
+Anzahl Ranks: 361
+Blockgroesse: 105 x 105
+Kommunikator: 19 x 19
+Initialisierung der Matrizen auf Rank 0: 0.530510 Sekunden
+Scatterv Zeit: 0.870045 Sekunden
+Cannon Rechenzeit: 0.067994 Sekunden
+Gather Zeit: 0.087817 Sekunden
+Ergebniss Cannon:-428767214660
+Programm ausgeführt in: 1.664721 Sekunden
+
+
+
+Matrix groesse : 2000 x 2000
+Anzahl Ranks: 400
+Blockgroesse: 100 x 100
+Kommunikator: 20 x 20
+Initialisierung der Matrizen auf Rank 0: 0.535081 Sekunden
+Scatterv Zeit: 0.998131 Sekunden
+Cannon Rechenzeit: 0.058673 Sekunden
+Gather Zeit: 0.077540 Sekunden
+Ergebniss Cannon:475901762408
+Programm ausgeführt in: 1.768082 Sekunden
+
+
+
+Matrix groesse : 4000 x 4000
+Anzahl Ranks: 25
+Blockgroesse: 800 x 800
+Kommunikator: 5 x 5
+Initialisierung der Matrizen auf Rank 0: 2.165922 Sekunden
+Scatterv Zeit: 0.205027 Sekunden
+Cannon Rechenzeit: 11.543080 Sekunden
+Gather Zeit: 0.199736 Sekunden
+Ergebniss Cannon:5392656653293
+Programm ausgeführt in: 14.167044 Sekunden
+
+
+
+Matrix groesse : 4000 x 4000
+Anzahl Ranks: 64
+Blockgroesse: 500 x 500
+Kommunikator: 8 x 8
+Initialisierung der Matrizen auf Rank 0: 2.133027 Sekunden
+Scatterv Zeit: 0.228648 Sekunden
+Cannon Rechenzeit: 4.111723 Sekunden
+Gather Zeit: 0.220416 Sekunden
+Ergebniss Cannon:5392656653293
+Programm ausgeführt in: 6.765178 Sekunden
+
+
+
+Matrix groesse : 4000 x 4000
+Anzahl Ranks: 100
+Blockgroesse: 400 x 400
+Kommunikator: 10 x 10
+Initialisierung der Matrizen auf Rank 0: 2.145516 Sekunden
+Scatterv Zeit: 0.294497 Sekunden
+Cannon Rechenzeit: 2.535746 Sekunden
+Gather Zeit: 0.219926 Sekunden
+Ergebniss Cannon:5392656653293
+Programm ausgeführt in: 5.256863 Sekunden
+
+
+
+Matrix groesse : 4005 x 4005
+Anzahl Ranks: 225
+Blockgroesse: 267 x 267
+Kommunikator: 15 x 15
+Initialisierung der Matrizen auf Rank 0: 2.174825 Sekunden
+Scatterv Zeit: 0.538068 Sekunden
+Cannon Rechenzeit: 1.046403 Sekunden
+Gather Zeit: 0.221718 Sekunden
+Ergebniss Cannon:-5453940666657
+Programm ausgeführt in: 4.055290 Sekunden
+
+
+
+Matrix groesse : 4009 x 4009
+Anzahl Ranks: 361
+Blockgroesse: 211 x 211
+Kommunikator: 19 x 19
+Initialisierung der Matrizen auf Rank 0: 2.132049 Sekunden
+Scatterv Zeit: 0.956239 Sekunden
+Cannon Rechenzeit: 0.592424 Sekunden
+Gather Zeit: 0.240127 Sekunden
+Ergebniss Cannon:-3505368871168
+Programm ausgeführt in: 4.038318 Sekunden
+
+
+Matrix groesse : 4000 x 4000
+Anzahl Ranks: 400
+Blockgroesse: 200 x 200
+Kommunikator: 20 x 20
+Initialisierung der Matrizen auf Rank 0: 2.255032 Sekunden
+Scatterv Zeit: 1.060714 Sekunden
+Cannon Rechenzeit: 0.517074 Sekunden
+Gather Zeit: 0.225241 Sekunden
+Ergebniss Cannon:5392656653293
+Programm ausgeführt in: 4.162786 Sekunden
+
+
+
+Matrix groesse : 6000 x 6000
+Anzahl Ranks: 64
+Blockgroesse: 750 x 750
+Kommunikator: 8 x 8
+Initialisierung der Matrizen auf Rank 0: 4.827038 Sekunden
+Scatterv Zeit: 0.398298 Sekunden
+Cannon Rechenzeit: 15.610571 Sekunden
+Gather Zeit: 0.438079 Sekunden
+Ergebniss Cannon:-4898432053840
+Programm ausgeführt in: 21.365847 Sekunden
+
+
+
+Matrix groesse : 6000 x 6000
+Anzahl Ranks: 100
+Blockgroesse: 600 x 600
+Kommunikator: 10 x 10
+Initialisierung der Matrizen auf Rank 0: 4.994872 Sekunden
+Scatterv Zeit: 0.439165 Sekunden
+Cannon Rechenzeit: 9.126372 Sekunden
+Gather Zeit: 0.483828 Sekunden
+Ergebniss Cannon:-4898432053840
+Programm ausgeführt in: 15.119744 Sekunden
+
+
+
+Matrix groesse : 6000 x 6000
+Anzahl Ranks: 225
+Blockgroesse: 400 x 400
+Kommunikator: 15 x 15
+Initialisierung der Matrizen auf Rank 0: 4.885765 Sekunden
+Scatterv Zeit: 0.690897 Sekunden
+Cannon Rechenzeit: 3.864871 Sekunden
+Gather Zeit: 0.436834 Sekunden
+Ergebniss Cannon:-4898432053840
+Programm ausgeführt in: 9.963552 Sekunden
+
+
+Matrix groesse : 6004 x 6004
+Anzahl Ranks: 361
+Blockgroesse: 316 x 316
+Kommunikator: 19 x 19
+Initialisierung der Matrizen auf Rank 0: 5.239915 Sekunden
+Scatterv Zeit: 1.054832 Sekunden
+Cannon Rechenzeit: 2.346450 Sekunden
+Gather Zeit: 0.422831 Sekunden
+Ergebniss Cannon:-15563700873639
+Programm ausgeführt in: 9.200718 Sekunden
+
+
+
+Matrix groesse : 6000 x 6000
+Anzahl Ranks: 400
+Blockgroesse: 300 x 300
+Kommunikator: 20 x 20
+Initialisierung der Matrizen auf Rank 0: 4.929221 Sekunden
+Scatterv Zeit: 1.216295 Sekunden
+Cannon Rechenzeit: 2.090735 Sekunden
+Gather Zeit: 0.429510 Sekunden
+Ergebniss Cannon:-4898432053840
+Programm ausgeführt in: 8.794376 Sekunden
+
+
+
+Matrix groesse : 8000 x 8000
+Anzahl Ranks: 100
+Blockgroesse: 800 x 800
+Kommunikator: 10 x 10
+Initialisierung der Matrizen auf Rank 0: 8.631425 Sekunden
+Scatterv Zeit: 0.621697 Sekunden
+Cannon Rechenzeit: 23.391089 Sekunden
+Gather Zeit: 0.792137 Sekunden
+Ergebniss Cannon:14535340746523
+Programm ausgeführt in: 33.546029 Sekunden
+
+
+
+Matrix groesse : 7995 x 7995
+Anzahl Ranks: 225
+Blockgroesse: 533 x 533
+Kommunikator: 15 x 15
+Initialisierung der Matrizen auf Rank 0: 8.620163 Sekunden
+Scatterv Zeit: 0.868073 Sekunden
+Cannon Rechenzeit: 9.456337 Sekunden
+Gather Zeit: 0.932763 Sekunden
+Ergebniss Cannon:21753084039703
+Programm ausgeführt in: 20.017525 Sekunden
+
+
+
+Matrix groesse : 7999 x 7999
+Anzahl Ranks: 361
+Blockgroesse: 421 x 421
+Kommunikator: 19 x 19
+Initialisierung der Matrizen auf Rank 0: 8.641412 Sekunden
+Scatterv Zeit: 1.266872 Sekunden
+Cannon Rechenzeit: 5.651865 Sekunden
+Gather Zeit: 0.750925 Sekunden
+Ergebniss Cannon:892562333677
+Programm ausgeführt in: 16.491196 Sekunden
+
+
+
+Matrix groesse : 8000 x 8000
+Anzahl Ranks: 400
+Blockgroesse: 400 x 400
+Kommunikator: 20 x 20
+Initialisierung der Matrizen auf Rank 0: 8.821311 Sekunden
+Scatterv Zeit: 1.342443 Sekunden
+Cannon Rechenzeit: 5.154730 Sekunden
+Gather Zeit: 0.736076 Sekunden
+Ergebniss Cannon:14535340746523
+Programm ausgeführt in: 16.219042 Sekunden

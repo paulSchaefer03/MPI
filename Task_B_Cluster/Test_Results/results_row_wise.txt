@@ -1,0 +1,267 @@
+Anzahl Ranks: 25
+Matrixgröße: 800 x 800
+Row wise Matrix Mul Time taken: 0.4493 seconds
+
+real	0m2.364s
+user	0m16.343s
+sys	0m8.757s
+
+
+
+Anzahl Ranks: 64
+Matrixgröße: 800 x 800
+Row wise Matrix Mul Time taken: 0.2268 seconds
+
+real	0m2.875s
+user	0m27.920s
+sys	0m41.163s
+
+
+
+Anzahl Ranks: 100
+Matrixgröße: 800 x 800
+Row wise Matrix Mul Time taken: 0.8595 seconds
+
+real	0m3.616s
+user	0m51.267s
+sys	0m30.868s
+
+
+
+Anzahl Ranks: 225
+Matrixgröße: 800 x 800
+Row wise Matrix Mul Time taken: 1.9823 seconds
+
+real	0m5.740s
+user	1m55.394s
+sys	0m49.322s
+
+
+
+Anzahl Ranks: 361
+Matrixgröße: 800 x 800
+Row wise Matrix Mul Time taken: 2.3228 seconds
+
+real	0m5.709s
+user	2m31.529s
+sys	0m42.848s
+
+
+
+Anzahl Ranks: 400
+Matrixgröße: 800 x 800
+Row wise Matrix Mul Time taken: 2.7215 seconds
+
+real	0m5.830s
+user	2m44.757s
+sys	0m40.047s
+
+
+
+Anzahl Ranks: 25
+Matrixgröße: 2000 x 2000
+Row wise Matrix Mul Time taken: 8.0047 seconds
+
+real	0m10.416s
+user	3m34.934s
+sys	0m10.423s
+
+
+
+Anzahl Ranks: 64
+Matrixgröße: 2000 x 2000
+Row wise Matrix Mul Time taken: 3.2590 seconds
+
+real	0m6.295s
+user	4m7.237s
+sys	0m44.645s
+
+
+
+Anzahl Ranks: 100
+Matrixgröße: 2000 x 2000
+Row wise Matrix Mul Time taken: 3.1214 seconds
+
+real	0m6.319s
+user	3m3.531s
+sys	0m34.643s
+
+
+
+Anzahl Ranks: 225
+Matrixgröße: 2000 x 2000
+Row wise Matrix Mul Time taken: 5.8979 seconds
+
+real	0m10.278s
+user	5m58.588s
+sys	0m59.500s
+
+
+
+Anzahl Ranks: 361
+Matrixgröße: 2000 x 2000
+Row wise Matrix Mul Time taken: 4.1549 seconds
+
+real	0m7.696s
+user	4m45.026s
+sys	0m49.372s
+
+
+
+Anzahl Ranks: 400
+Matrixgröße: 2000 x 2000
+Row wise Matrix Mul Time taken: 4.9215 seconds
+
+real	0m8.387s
+user	5m13.771s
+sys	0m45.212s
+
+
+
+Anzahl Ranks: 25
+Matrixgröße: 4000 x 4000
+Row wise Matrix Mul Time taken: 63.5442 seconds
+
+real	1m7.747s
+user	27m13.788s
+sys	0m20.201s
+
+
+
+Anzahl Ranks: 64
+Matrixgröße: 4000 x 4000
+Row wise Matrix Mul Time taken: 25.0470 seconds
+
+real	0m29.884s
+user	28m47.138s
+sys	1m3.152s
+
+
+
+Anzahl Ranks: 100
+Matrixgröße: 4000 x 4000
+Row wise Matrix Mul Time taken: 17.6389 seconds
+
+real	0m22.587s
+user	16m16.545s
+sys	0m49.624s
+
+
+
+Anzahl Ranks: 225
+Matrixgröße: 4000 x 4000
+Row wise Matrix Mul Time taken: 20.7616 seconds
+
+real	0m27.566s
+user	20m36.348s
+sys	1m57.387s
+
+
+
+Anzahl Ranks: 361
+Matrixgröße: 4000 x 4000
+Row wise Matrix Mul Time taken: 9.0409 seconds
+
+real	0m14.540s
+user	11m8.525s
+sys	1m5.232s
+
+
+
+Anzahl Ranks: 400
+Matrixgröße: 4000 x 4000
+Row wise Matrix Mul Time taken: 9.2810 seconds
+
+real	0m14.783s
+user	10m48.810s
+sys	1m2.158s
+
+
+
+Anzahl Ranks: 64
+Matrixgröße: 6000 x 6000
+Row wise Matrix Mul Time taken: 100.4089 seconds
+
+real	1m48.236s
+user	111m18.141s
+sys	1m45.761s
+
+
+
+Anzahl Ranks: 100
+Matrixgröße: 6000 x 6000
+Row wise Matrix Mul Time taken: 68.2455 seconds
+
+real	1m16.310s
+user	60m15.518s
+sys	1m19.433s
+
+
+
+Anzahl Ranks: 225
+Matrixgröße: 6000 x 6000
+Row wise Matrix Mul Time taken: 51.2525 seconds
+
+real	1m1.882s
+user	52m5.696s
+sys	1m59.059s
+
+
+
+Anzahl Ranks: 361
+Matrixgröße: 6000 x 6000
+Row wise Matrix Mul Time taken: 23.1622 seconds
+
+real	0m31.540s
+user	27m37.756s
+sys	1m32.001s
+
+
+
+Anzahl Ranks: 400
+Matrixgröße: 6000 x 6000
+Row wise Matrix Mul Time taken: 21.9414 seconds
+
+real	0m30.193s
+user	25m9.849s
+sys	1m27.285s
+
+
+
+Anzahl Ranks: 100
+Matrixgröße: 8000 x 8000
+Row wise Matrix Mul Time taken: 213.4819 seconds
+
+real	3m45.535s
+user	183m21.816s
+sys	1m58.855s
+
+
+
+Anzahl Ranks: 225
+Matrixgröße: 8000 x 8000
+Row wise Matrix Mul Time taken: 124.9968 seconds
+
+real	2m20.645s
+user	124m45.876s
+sys	2m37.850s
+
+
+
+Anzahl Ranks: 361
+Matrixgröße: 8000 x 8000
+Row wise Matrix Mul Time taken: 64.1792 seconds
+
+real	1m16.634s
+user	71m59.981s
+sys	2m16.858s
+
+
+
+Anzahl Ranks: 400
+Matrixgröße: 8000 x 8000
+Row wise Matrix Mul Time taken: 58.8909 seconds
+
+real	1m11.425s
+user	63m24.746s
+sys	2m11.694s

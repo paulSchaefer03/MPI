@@ -72,8 +72,7 @@ int main(int argc, char* argv[]){
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
     MPI_Comm_size(MPI_COMM_WORLD, &size);
 
-    
-
+     
     if(rank == 0){
         matrix_a = (double**)malloc(MATRIX_SIZE*MATRIX_SIZE*sizeof(double*));
         matrix_c = (double**)malloc(MATRIX_SIZE*MATRIX_SIZE*sizeof(double*));
@@ -92,7 +91,7 @@ int main(int argc, char* argv[]){
         printMatrix(matrix_a);
         printf("matrix_b\n");
         printMatrix(matrix_b);*/
-
+        double start_time = MPI_Wtime();
        
         for(int i= 0; i<MATRIX_SIZE; i++){
             ierr = MPI_Bcast(matrix_b[i], MATRIX_SIZE, MPI_DOUBLE, 0, MPI_COMM_WORLD);
@@ -121,8 +120,12 @@ int main(int argc, char* argv[]){
 
         /*printf("Solution: \n");
         printMatrix(matrix_c);*/
+        double end_time = MPI_Wtime();
 
-        printf("Solution lower right corner: %.2f\n", matrix_c[MATRIX_SIZE-1][MATRIX_SIZE-1]);
+        //printf("Solution lower right corner: %.2f\n", matrix_c[MATRIX_SIZE-1][MATRIX_SIZE-1]);
+        printf("Anzahl Ranks: %d\n", size);
+        printf("Matrixgröße: %d x %d\n", MATRIX_SIZE, MATRIX_SIZE);
+        printf("Row wise Matrix Mul Time taken: %.4f seconds\n", end_time - start_time);
         free(matrix_a);
         free(matrix_c);
     }

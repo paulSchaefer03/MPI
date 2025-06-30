@@ -5,11 +5,11 @@
 #include <math.h>
 #include "mpi.h"
 
-#define MATRIX_SIZE 20000
+#define MATRIX_SIZE 2000
 #define DETERMINISTIC 1 // 1 für deterministische Ausführung, 0 für zufällige Ausführung
 #define CLUSTER 1       // 1 für Cluster, 0 für lokale Ausführung
-#define VERTEILTES_INIT 1 // 1 für parallele Initialisierung durch alle Prozesse, 0 für Rank-0-only Init
-
+#define VERTEILTES_INIT 0 // 1 für parallele Initialisierung durch alle Prozesse, 0 für Rank-0-only Init
+#define CHECKSUMMEN 0
 
 // Formate für die Matrix-Elemente
 
@@ -135,7 +135,7 @@ int main(int argc, char *argv[]) {
     
     MPI_Barrier(MPI_COMM_WORLD);
     double programm_start_time = MPI_Wtime();
-
+    double start_init_time = MPI_Wtime();
     int q = sqrt(world_size);  // Prozessgittergröße
 
     if (q * q != world_size) {
@@ -179,31 +179,18 @@ int main(int argc, char *argv[]) {
 #if VERTEILTES_INIT == 0
     if (kart_rank == 0) {
         //Speicher für die globalen Matrizen allokieren
-        double start_init_time = MPI_Wtime();
         matrix_a = malloc(MATRIX_SIZE * MATRIX_SIZE * sizeof(TYP));
         matrix_b = malloc(MATRIX_SIZE * MATRIX_SIZE * sizeof(TYP));
         //matrix_c = malloc(MATRIX_SIZE * MATRIX_SIZE * sizeof(TYP));
         // Initalisierung der globalen Matrizen
 
         befullenMatrix(matrix_a, DETERMINISTIC);
-        //schreibeMatrixInDatei(FILE_NAME_MATRIX_A, matrix_a);
-        //printf("A_Global:\n");
-        //ausgabeArrayAlsMatrix(matrix_a, MATRIX_SIZE);
-        
         befullenMatrix(matrix_b, DETERMINISTIC);
-        //schreibeMatrixInDatei(FILE_NAME_MATRIX_B, matrix_b);
-        //printf("B_Global:\n");
-        //ausgabeArrayAlsMatrix(matrix_b, MATRIX_SIZE);
-        double end_init_time = MPI_Wtime();
-        printf("Initialisierung der Matrizen auf Rank 0: %f Sekunden\n", end_init_time - start_init_time);
 
         // Check um später Richtigkeit zu prüfen
-        if(MATRIX_SIZE <= 2000) {
-            if(!CLUSTER){
+        if(MATRIX_SIZE <= 8000) {
+            if(!CLUSTER && CHECKSUMMEN){
                 multiplizierenMatrix(matrix_a, matrix_b, matrix_c);
-
-                //printf("Ergebniss Matrix (Korrekt):\n");
-                //ausgabeArrayAlsMatrix(matrix_c, MATRIX_SIZE); 
                 printf("Ergebniss Korrekt:"SUMTYPE_FORMAT"\n", berechenSummeArray(matrix_c));
             }
 
@@ -211,6 +198,8 @@ int main(int argc, char *argv[]) {
 
 
     }
+    MPI_Barrier(KART_KOMM);
+    double end_init_time = MPI_Wtime();
 #endif
 
     // Broadcast der Submatrizen vorbereiten
@@ -246,13 +235,7 @@ int main(int argc, char *argv[]) {
     // Scatterv für matrix_b
     MPI_Scatterv(matrix_b, sendzaehler, verschiebungen, TYPE_SUBMATRIX, lokal_b, block_size * block_size, MPI_TYP, 0, KART_KOMM);
     double end_scatter_time = MPI_Wtime();
-    if (kart_rank == 0) {
-        printf("Scatterv Zeit: %f Sekunden\n", end_scatter_time - start_scatter_time);
-    }
-/*     if (kart_rank == kart_size - 1) {
-        printf("Submatrix auf letztem Rank (Rank %d):\n", kart_rank);
-        ausgabeArrayAlsMatrix(lokal_a, block_size);
-    } */
+
 #else
     double start_init_time = MPI_Wtime();
     int global_row = koords[0] * block_size;
@@ -303,51 +286,29 @@ int main(int argc, char *argv[]) {
         }
     }
     double end_cannon_time = MPI_Wtime();
-    if (kart_rank == 0) {
-        printf("Cannon Rechenzeit: %f Sekunden\n", end_cannon_time - start_cannon_time);
-    }
-
-    // Jede Submatrix nach der Berechnung in eine Datei schreiben
-    // Matrizen sind Korrekt auf Cluster
-/*     char filename[256];
-    snprintf(filename, sizeof(filename), "submatrix_cluster_rank_%d.txt", kart_rank);
-    FILE *fp = fopen(filename, "w");
-    if (fp != NULL) {
-        for (int i = 0; i < block_size; i++) {
-            for (int j = 0; j < block_size; j++) {
-                fprintf(fp, FORMAT, lokal_c[i * block_size + j]);
-                if (j < block_size - 1)
-                    fprintf(fp, ",");
-            }
-            fprintf(fp, "\n");
-        }
-        fclose(fp);
-    } else {
-        fprintf(stderr, "Rank %d: Fehler beim Öffnen der Datei %s\n", kart_rank, filename);
-    } */
 
 
-/*  
+
     // Ausschließlich auf dem Cluster (NICHT LOKAL) kommt es mit Gatherv zu Problemen
     // Diese treten bei ganz bestimmten Matrizen größen mit bestimmter Anzahl Ranks auf
     // z.B. 800x800 mit 100 Ranks
     // Im Fehlerfall wird eine Matrix erzeug, in welcher mache Werte in bestimmten Zeilen um eine Zahl versetzt sind
     // Alle Submatrizen werden korrekt berechnet und der Fehler ist für mich nicht weiter zu debuggen
-    
-    
+    // Problem ist ein Fehler in MPI nicht im Code, wie in der Übung geklärt
+    double start_gather_time = MPI_Wtime();
     if (kart_rank == 0) {
         MPI_Gatherv(lokal_c, block_size * block_size, MPI_TYP, matrix_c, sendzaehler, verschiebungen, TYPE_SUBMATRIX, 0, KART_KOMM);
     } else {
         MPI_Gatherv(lokal_c, block_size * block_size, MPI_TYP, NULL, NULL, NULL, TYPE_SUBMATRIX, 0, KART_KOMM);
-    } */
+    } 
 
 
-    double start_gather_time = MPI_Wtime();
-    if (kart_rank == 0) {
+    //Alternative mit MPI_Gather
+/*     if (kart_rank == 0) {
         // Empfangspuffer allokieren
         TYP *recv_buffer = malloc(kart_size * block_size * block_size * sizeof(TYP));
         
-        // Alle Prozessoren senden lokal_c → recv_buffer auf Rank 0
+        // Alle Prozessoren senden lokal_c recv_buffer auf Rank 0
         MPI_Gather(lokal_c, block_size * block_size, MPI_TYP,
                 recv_buffer, block_size * block_size, MPI_TYP,
                 0, KART_KOMM);
@@ -372,28 +333,22 @@ int main(int argc, char *argv[]) {
     } else {
         // Alle nicht-Rank-0 senden nur ihre Submatrix
         MPI_Gather(lokal_c, block_size * block_size, MPI_TYP, NULL, 0, MPI_TYP, 0, KART_KOMM);
-    }
+    } */
 
     double end_gather_time = MPI_Wtime();
-    if (kart_rank == 0) {
-        printf("Gather Zeit: %f Sekunden\n", end_gather_time - start_gather_time);
-    }
-
-    MPI_Barrier(KART_KOMM);
-
-    if (kart_rank == 0) {
-        //printf("C_Global:\n");
-        //ausgabeArrayAlsMatrix(matrix_c, MATRIX_SIZE);
-        //schreibeMatrixInDatei(FILE_NAME, matrix_c);
-        printf("Ergebniss Cannon:"SUMTYPE_FORMAT"\n", berechenSummeArray(matrix_c));
-        
-    }
 
     MPI_Barrier(MPI_COMM_WORLD);
     double programm_end_time = MPI_Wtime();
 
     if (world_rank == 0) {
         double duration = programm_end_time - programm_start_time;
+        printf("Initialisierung der Matrizen auf Rank 0: %f Sekunden\n", end_init_time - start_init_time);
+        printf("Scatterv Zeit: %f Sekunden\n", end_scatter_time - start_scatter_time);
+        printf("Cannon Rechenzeit: %f Sekunden\n", end_cannon_time - start_cannon_time);
+        printf("Gatherv Zeit: %f Sekunden\n", end_gather_time - start_gather_time);
+#if CHECKSUMMEN
+        printf("Ergebnis Cannon: " SUMTYPE_FORMAT "\n", berechenSummeArray(matrix_c));
+#endif
         printf("Programm ausgeführt in: %f Sekunden\n", duration);
     }
 
